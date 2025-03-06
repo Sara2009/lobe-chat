@@ -1,4 +1,5 @@
 import { Icon } from '@lobehub/ui';
+// eslint-disable-next-line unused-imports/no-unused-imports, @typescript-eslint/no-unused-vars
 import { Bot, Brain, BrainCircuit, House, Puzzle } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useMemo } from 'react';
@@ -38,21 +39,21 @@ export const useNav = () => {
         key: DiscoverTab.Assistants,
         label: t('tab.assistants'),
       },
-      {
-        icon: <Icon icon={Puzzle} size={iconSize} />,
-        key: DiscoverTab.Plugins,
-        label: t('tab.plugins'),
-      },
-      {
-        icon: <Icon icon={Brain} size={iconSize} />,
-        key: DiscoverTab.Models,
-        label: t('tab.models'),
-      },
-      {
-        icon: <Icon icon={BrainCircuit} size={iconSize} />,
-        key: DiscoverTab.Providers,
-        label: t('tab.providers'),
-      },
+      // {
+      //   icon: <Icon icon={Puzzle} size={iconSize} />,
+      //   key: DiscoverTab.Plugins,
+      //   label: t('tab.plugins'),
+      // },
+      // {
+      //   icon: <Icon icon={Brain} size={iconSize} />,
+      //   key: DiscoverTab.Models,
+      //   label: t('tab.models'),
+      // },
+      // {
+      //   icon: <Icon icon={BrainCircuit} size={iconSize} />,
+      //   key: DiscoverTab.Providers,
+      //   label: t('tab.providers'),
+      // },
     ],
     [t],
   );

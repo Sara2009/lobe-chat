@@ -7,8 +7,9 @@ import { DiscoverAssistantItem, DiscoverModelItem, DiscoverPlugintem } from '@/t
 
 import Title from '../../components/Title';
 import AssistantList from './features/AssistantList';
-import ModelList from './features/ModelList';
-import PluginList from './features/PluginList';
+
+// import ModelList from './features/ModelList';
+// import PluginList from './features/PluginList';
 
 interface ClientProps {
   assistantList: DiscoverAssistantItem[];
@@ -16,6 +17,7 @@ interface ClientProps {
   pluginList: DiscoverPlugintem[];
 }
 
+// eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
 const Client = memo<ClientProps>(({ modelList, assistantList, pluginList }) => {
   const { t } = useTranslation('discover');
   return (
@@ -25,16 +27,16 @@ const Client = memo<ClientProps>(({ modelList, assistantList, pluginList }) => {
       </Title>
       <AssistantList data={assistantList} />
       <div />
-      <Title more={t('home.more')} moreLink={'/discover/plugins'}>
+      {/* <Title more={t('home.more')} moreLink={'/discover/plugins'}>
         {t('home.featuredTools')}
       </Title>
       <PluginList data={pluginList} />
-      <div />
-      <Title more={t('home.more')} moreLink={'/discover/models'}>
+      <div /> */}
+      {/* <Title more={t('home.more')} moreLink={'/discover/models'}>
         {t('home.featuredModels')}
       </Title>
       <div />
-      <ModelList data={modelList} />
+      <ModelList data={modelList} /> */}
     </>
   );
 });
