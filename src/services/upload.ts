@@ -8,6 +8,44 @@ import { uuid } from '@/utils/uuid';
 
 export const UPLOAD_NETWORK_ERROR = 'NetWorkError';
 
+const compressImageToBase64 = (file: File, maxSize: number) => {
+  // 对图片进行压缩处理
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      const img = new Image();
+      img.src = reader.result as string;
+      img.addEventListener('load', () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        let width = img.width;
+        let height = img.height;
+        let quality = 0.9;
+        let dataURL = '';
+        do {
+          canvas.width = width;
+          canvas.height = height;
+          ctx?.clearRect(0, 0, width, height);
+          ctx?.drawImage(img, 0, 0, width, height);
+          dataURL = canvas.toDataURL('image/jpeg', quality);
+          if (dataURL.length < maxSize) break;
+
+          if (quality > 0.5) {
+            quality -= 0.1;
+          } else {
+            width *= 0.9;
+            height *= 0.9;
+          }
+        } while (dataURL.length > maxSize);
+
+        resolve(dataURL);
+      });
+    });
+    reader.addEventListener('error', reject);
+    reader.readAsDataURL(file);
+  });
+};
+
 class UploadService {
   uploadWithProgress = async (
     file: File,
@@ -22,6 +60,14 @@ class UploadService {
     const xhr = new XMLHttpRequest();
 
     const { preSignUrl, ...result } = await this.getSignedUploadUrl(file, directory);
+
+    // [custom] if the file is image, we don't need to upload it, just return the metadata
+    if (file.type.startsWith('image')) {
+      // base 64
+      result.path = await compressImageToBase64(file, 256 * 1024);
+      return result;
+    }
+
     let startTime = Date.now();
     xhr.upload.addEventListener('progress', (event) => {
       if (event.lengthComputable) {
@@ -40,7 +86,7 @@ class UploadService {
       }
     });
 
-    xhr.open('PUT', preSignUrl);
+    xhr.open('POST', preSignUrl);
     xhr.setRequestHeader('Content-Type', file.type);
     const data = await file.arrayBuffer();
 

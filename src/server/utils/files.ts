@@ -6,6 +6,11 @@ import { S3 } from '@/server/modules/S3';
 export const getFullFileUrl = async (url?: string | null, expiresIn?: number) => {
   if (!url) return '';
 
+  // If the url is a base64 image, return directly
+  if (url.startsWith('data:image')) {
+    return url;
+  }
+
   // If bucket is not set public read, the preview address needs to be regenerated each time
   if (!fileEnv.S3_SET_ACL) {
     const s3 = new S3();
