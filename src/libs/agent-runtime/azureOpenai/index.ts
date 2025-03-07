@@ -3,7 +3,14 @@ import type { Stream } from 'openai/streaming';
 
 import { LobeRuntimeAI } from '../BaseAI';
 import { AgentRuntimeErrorType } from '../error';
-import { ChatCompetitionOptions, ChatStreamPayload, ModelProvider } from '../types';
+import {
+  ChatCompetitionOptions,
+  ChatStreamPayload,
+  Embeddings,
+  EmbeddingsOptions,
+  EmbeddingsPayload,
+  ModelProvider,
+} from '../types';
 import { AgentRuntimeError } from '../utils/createError';
 import { debugStream } from '../utils/debugStream';
 import { transformResponseToStream } from '../utils/openaiCompatibleFactory';
@@ -121,4 +128,18 @@ export class LobeAzureOpenAI implements LobeRuntimeAI {
       return `${protocol}***${rest}`;
     });
   };
+
+  async embeddings(payload: EmbeddingsPayload, options?: EmbeddingsOptions): Promise<Embeddings[]> {
+    const res = await this.client.embeddings.create(
+      {
+        dimensions: payload.dimensions,
+        input: payload.input as string[],
+        model: payload.model,
+        user: options?.user,
+      },
+      { headers: options?.headers, signal: options?.signal },
+    );
+
+    return res.data.map((item) => item.embedding);
+  }
 }
